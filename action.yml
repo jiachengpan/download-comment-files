@@ -9,4 +9,4 @@ outputs:
     description: downloaded file names
 runs:
   using: 'node12'
-  main: 'main.js'
+  main: 'dist/index.js'
