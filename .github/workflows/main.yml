@@ -1,0 +1,14 @@
+on:
+	issue_comment
+
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    name: test job
+    steps:
+    - id: download
+			uses: jiachengpan/download-comment-files@master
+      with:
+        suffix: pdf
+    - name: get the output
+      run: echo "downloaded ${{ steps.download.outputs.time }}"
