@@ -30,7 +30,7 @@ async function run() {
       const link = links[i];
 
       const url  = link.getAttribute('href');
-      const text = link.rawText();
+      const text = link.rawText;
 
       const filename = (text === url) ? path.basename(text) : text;
       console.log(filename, url);
