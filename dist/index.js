@@ -51782,9 +51782,8 @@ async function run() {
       console.log('url:', filename, url);
 
       const filetype = await fileType.fromStream(got.stream(url));
-      if (!filetype) continue;
-
       console.log('filetype:', url, filetype);
+      if (!filetype) continue;
 
       if (suffixRe.test(filetype.ext)) {
         const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
