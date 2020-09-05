@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { GitHub, context } = require('@actions/github');
 const util = require('util');
+const path = require('path');
 const got  = require('got');
 const md   = require('markdown-it')({html: true, linkify: true});
 const fileType = require('file-type');
@@ -24,20 +25,25 @@ async function run() {
     const root = htmlParser.parse(html);
     const links = root.querySelectorAll('a');
 
+    let downloaded_files = [];
     for (let i = 0; i < links.length; i++) {
-      let link = links[i];
-      console.log(link);
+      const link = links[i];
+
+      const url  = link.getAttribute('href');
+      const text = link.rawText();
+
+      const filename = (text === url) ? path.basename(text) : text;
+      console.log(filename, url);
+
+      const stream = got.stream(url);
+      const filetype = await fileType.fromStream(stream);
+      console.log(url, filetype);
+
+      if (suffixRe.test(filetype.ext)) {
+        stream.pipe(fs.createWriteStream(filename));
+        downloaded_files.push(filename);
+      }
     }
-
-    //  const stream = got.stream(url);
-    //  const filetype = await fileType.fromStream(stream);
-    //  console.log(url, filetype);
-
-    //  if (suffixRe.test(filetype.ext)) {
-    //    stream.pipe(fs.createWriteStream(url.name));
-    //  }
-
-    let downloaded_files = "no files";
 
     // Get owner and repo from context of payload that triggered the action
     const { owner, repo } = context.repo;
