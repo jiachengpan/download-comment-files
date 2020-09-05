@@ -6,10 +6,13 @@ const fs   = require('fs');
 const url  = require('url');
 const got  = require('got');
 const shell = require('shelljs');
+const stream = require('stream');
 
 const md   = require('markdown-it')({html: true, linkify: true});
 const fileType = require('file-type');
 const htmlParser = require('node-html-parser');
+
+const pipeline = util.promisify(stream.pipeline);
 
 async function run() {
   try {
@@ -67,7 +70,10 @@ async function run() {
       try {
         const saved = path.join(output_path, filename);
         console.log('downloading...', href, '->', saved);
-        got(href, options).pipe(fs.createWriteStream(saved));
+
+        await pipeline(
+          got(href, options),
+          pipe(fs.createWriteStream(saved)));
 
         const filetype = await fileType.fromStream(fs.createReadStream(saved));
         console.log('filetype:', saved, filetype);

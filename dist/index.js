@@ -51731,10 +51731,13 @@ const fs   = __webpack_require__(5747);
 const url  = __webpack_require__(8835);
 const got  = __webpack_require__(3061);
 const shell = __webpack_require__(3516);
+const stream = __webpack_require__(2413);
 
 const md   = __webpack_require__(8561)({html: true, linkify: true});
 const fileType = __webpack_require__(4930);
 const htmlParser = __webpack_require__(4363);
+
+const pipeline = util.promisify(stream.pipeline);
 
 async function run() {
   try {
@@ -51792,7 +51795,10 @@ async function run() {
       try {
         const saved = path.join(output_path, filename);
         console.log('downloading...', href, '->', saved);
-        got(href, options).pipe(fs.createWriteStream(saved));
+
+        await pipeline(
+          got(href, options),
+          pipe(fs.createWriteStream(saved)));
 
         const filetype = await fileType.fromStream(fs.createReadStream(saved));
         console.log('filetype:', saved, filetype);
