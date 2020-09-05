@@ -51798,7 +51798,7 @@ async function run() {
 
         await pipeline(
           got(href, options),
-          pipe(fs.createWriteStream(saved)));
+          fs.createWriteStream(saved));
 
         const filetype = await fileType.fromStream(fs.createReadStream(saved));
         console.log('filetype:', saved, filetype);
