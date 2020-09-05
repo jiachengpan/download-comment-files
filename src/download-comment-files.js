@@ -60,7 +60,7 @@ async function run() {
 
       let options = {};
       const parsed_url = url.parse(href);
-      if (parsed_url && 'github' in parsed_url.hostname) {
+      if (parsed_url && parsed_url.hostname.indexOf('github.com') >= 0) {
         options = { headers: `authorization: Bearer ${github_token}` };
       }
 
