@@ -1,0 +1,12 @@
+name: download comment files
+description: download files from issue comments
+inputs:
+  suffix:
+    description: download files with specified suffix
+    default: .pdf
+outputs:
+  files:
+    description: downloaded file names
+runs:
+  using: 'node12'
+  main: 'main.js'
