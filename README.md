@@ -5,6 +5,7 @@ Typical usage is to trigger this on `issue_comment` and `issues` events.
 
 Following is an example configuration:
 
+    steps:
     - name: download from comments
       uses: jiachengpan/download-comment-files@v1
       with:
@@ -16,6 +17,7 @@ The `output` is the target path to keep the downloaded files.
 
 To get what files are downloaded, one can use following settings:
 
+    steps:
     - id: download
       uses: jiachengpan/download-comment-files@master
       with:
