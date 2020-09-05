@@ -7,9 +7,6 @@ inputs:
   output:
     description: output path
     default: downloaded
-  repo-token:
-    description: repo token
-    default: ''
 outputs:
   files:
     description: downloaded file names

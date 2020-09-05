@@ -51752,7 +51752,6 @@ async function run() {
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
     const suffix = core.getInput('suffix', { required: true });
     const output = core.getInput('output', { required: true });
-    const github_token = core.getInput('repo-token');
     const suffixRe = new RegExp(suffix, 'gi');
 
     const issue = context.payload.issue;
@@ -51785,10 +51784,8 @@ async function run() {
 
       let options = { isStream: true };
       const parsed_url = url.parse(href);
-      console.log(parsed_url);
       if (parsed_url && parsed_url.hostname.indexOf('github.com') >= 0) {
         options.headers = {};
-        options.headers.authorization = `Bearer ${github_token}`;
       }
 
       console.log('header', options);
