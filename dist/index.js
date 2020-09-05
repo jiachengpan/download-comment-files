@@ -51783,20 +51783,22 @@ async function run() {
       filename = filename.replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/\s]+/g, '_').toLowerCase();
       console.log('href:', filename, href);
 
-      let options = {};
+      let options = { isStream: true };
       const parsed_url = url.parse(href);
+      console.log(parsed_url);
       if (parsed_url && parsed_url.hostname.indexOf('github.com') >= 0) {
-        options = { headers: `authorization: Bearer ${github_token}` };
+        options.headers = {};
+        options.headers.authorization = `Bearer ${github_token}`;
       }
 
-      const filetype = await fileType.fromStream(got.stream(href, options));
+      const filetype = await fileType.fromStream(got(href, options));
       console.log('filetype:', href, filetype);
       if (!filetype) continue;
 
       if (suffixRe.test(filetype.ext)) {
         const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
         console.log('downloading...', href, '->', saved);
-        got.stream(href, options).pipe(fs.createWriteStream(saved));
+        got(href, options).pipe(fs.createWriteStream(saved));
         downloaded_files.push(saved);
       }
     }
