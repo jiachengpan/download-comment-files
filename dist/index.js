@@ -51772,7 +51772,8 @@ async function run() {
       if (url in visited) continue;
       visited[url] = true;
 
-      const filename = (text === url) ? path.basename(text) : text;
+      let filename = (text === url) ? path.basename(text) : text;
+      filename = filename.replace(/[\s<>|_]+/g, '_').toLowerCase();
       console.log('url:', filename, url);
 
       const filetype = await fileType.fromStream(got.stream(url));
