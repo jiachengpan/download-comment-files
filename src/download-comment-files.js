@@ -47,12 +47,12 @@ async function run() {
       visited[url] = true;
 
       const filename = (text === url) ? path.basename(text) : text;
-      console.log(filename, url);
+      console.log('url:', filename, url);
 
       const filetype = await fileType.fromStream(got.stream(url));
       if (!filetype) continue;
 
-      console.log(url, filetype);
+      console.log('filetype:', url, filetype);
 
       if (suffixRe.test(filetype.ext)) {
         console.log('downloading...', url);
