@@ -44597,18 +44597,29 @@ async function run() {
     const suffix = core.getInput('suffix', { required: true });
     const suffixRe = new RegExp(suffix, 'gi');
 
+    const issue = context.payload.issue;
+    const output_path = issue.title.replace(/[\W_]+/g, '_') + '_#' + path.basename(issue.url);
+
+    if (!fs.existsSync(output_path)) {
+      fs.mkdirSync(output_path);
+    }
+
     const comment = context.payload.comment.body;
 
     const html = md.render(comment);
     const root = htmlParser.parse(html);
     const links = root.querySelectorAll('a');
 
-    let downloaded_files = [];
+    let downloaded_files = []; 
+    let visited = {};
     for (let i = 0; i < links.length; i++) {
       const link = links[i];
 
       const url  = link.getAttribute('href');
       const text = link.rawText;
+
+      if (url in visited) continue;
+      visited[url] = true;
 
       const filename = (text === url) ? path.basename(text) : text;
       console.log(filename, url);
@@ -44620,8 +44631,9 @@ async function run() {
 
       if (suffixRe.test(filetype.ext)) {
         console.log('downloading...', url);
-        got.stream(url).pipe(fs.createWriteStream(filename));
-        downloaded_files.push(filename);
+        const saved = path.join(output_path, filename);
+        got.stream(url).pipe(fs.createWriteStream(saved));
+        downloaded_files.push(saved);
       }
     }
 

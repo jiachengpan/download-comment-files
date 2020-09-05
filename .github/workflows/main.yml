@@ -11,4 +11,4 @@ jobs:
       with:
         suffix: pdf
     - name: get the output
-      run: echo "downloaded ${{ steps.download.outputs.time }}"
+      run: echo "downloaded ${{ steps.download.outputs.files }}"
