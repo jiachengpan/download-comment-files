@@ -51794,7 +51794,7 @@ async function run() {
         console.log('downloading...', href, '->', saved);
         got(href, options).pipe(fs.createWriteStream(saved));
 
-        const filetype = await fileType.fromFile(saved);
+        const filetype = await fileType.fromStream(fs.createReadStream(saved));
         console.log('filetype:', saved, filetype);
         if (!filetype || (!suffixRe.test(filetype.ext) && !suffixRe.test(filetype.mime))) {
           fs.unlinkSync(saved);
