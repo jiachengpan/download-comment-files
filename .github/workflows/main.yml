@@ -1,5 +1,5 @@
 on:
-	issue_comment
+  issue_comment
 
 jobs:
   test_job:
@@ -7,7 +7,7 @@ jobs:
     name: test job
     steps:
     - id: download
-			uses: jiachengpan/download-comment-files@master
+      uses: jiachengpan/download-comment-files@master
       with:
         suffix: pdf
     - name: get the output
