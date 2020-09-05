@@ -30,7 +30,7 @@ async function run() {
 
     const issue = context.payload.issue;
     const repo  = context.payload.repository;
-    const safe_title = issue.title.replace(/[\s<>|_]+/g, '_');
+    const safe_title = issue.title.replace(/[<>|_]+/g, '_');
     const output_path = path.join(output, repo.name, safe_title + '_#' + path.basename(issue.url));
 
     shell.mkdir('-p', output_path);
@@ -53,7 +53,7 @@ async function run() {
       visited[url] = true;
 
       let filename = (text === url) ? path.basename(text) : text;
-      filename = filename.replace(/[\s<>|_]+/g, '_').toLowerCase();
+      filename = filename.replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]+/g, '_').toLowerCase();
       console.log('url:', filename, url);
 
       const filetype = await fileType.fromStream(got.stream(url));
