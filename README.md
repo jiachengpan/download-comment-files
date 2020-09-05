@@ -6,7 +6,7 @@ Typical usage is to trigger this on `issue_comment` and `issues` events.
 Following is an example configuration:
 
     - name: download from comments
-      uses: jiachengpan/download-comment-files@master
+      uses: jiachengpan/download-comment-files@v1
       with:
         suffix: "pdf|txt|pptx|docx"
         output: downloads
