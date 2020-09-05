@@ -1,6 +1,6 @@
 on:
-  issue_comment
-  issues
+  - issue_comment
+  - issues
 
 jobs:
   test_job:
