@@ -62,7 +62,7 @@ async function run() {
       console.log('filetype:', url, filetype);
 
       if (suffixRe.test(filetype.ext)) {
-        const saved = path.join(output_path, path.basename(filename, ext) + '.' + ext );
+        const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
         console.log('downloading...', url, '->', saved);
         got.stream(url).pipe(fs.createWriteStream(saved));
         downloaded_files.push(saved);
