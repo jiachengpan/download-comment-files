@@ -24,6 +24,11 @@
     "@actions/exec": "^1.0.0",
     "@actions/github": "^1.0.0",
     "@vercel/ncc": "^0.24.0",
+    "file-type": "^15.0.0",
+    "get-urls": "^10.0.0",
+    "got": "^11.6.0",
+    "markdown-it": "^11.0.0",
+    "node-html-parser": "^1.2.20",
     "util": "^0.12.1"
   },
   "devDependencies": {

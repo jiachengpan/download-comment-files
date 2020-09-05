@@ -1,6 +1,10 @@
 const core = require('@actions/core');
 const { GitHub, context } = require('@actions/github');
 const util = require('util');
+const got  = require('got');
+const md   = require('markdown-it')({html: true, linkify: true});
+const fileType = require('file-type');
+const htmlParser = require('node-html-parser');
 
 async function run() {
   try {
@@ -10,16 +14,33 @@ async function run() {
       console.warn(`event name is not 'issue_comment': ${context.eventName}`)
     }
 
+    // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
+    const suffix = core.getInput('suffix', { required: true });
+    const suffixRe = new RegExp(suffix, 'gi');
+
     const comment = context.payload.comment.body;
-    console.log(`comment: ${comment}`);
+
+    const html = md.render(comment);
+    const root = htmlParser.parse(html);
+    const links = root.querySelectorAll('a');
+
+    for (let i = 0; i < links.length; i++) {
+      let link = links[i];
+      console.log(link);
+    }
+
+    //  const stream = got.stream(url);
+    //  const filetype = await fileType.fromStream(stream);
+    //  console.log(url, filetype);
+
+    //  if (suffixRe.test(filetype.ext)) {
+    //    stream.pipe(fs.createWriteStream(url.name));
+    //  }
 
     let downloaded_files = "no files";
 
     // Get owner and repo from context of payload that triggered the action
     const { owner, repo } = context.repo;
-
-    // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
-    const suffix = core.getInput('suffix', { required: true });
 
     core.setOutput('files', downloaded_files);
   } catch (error) {
