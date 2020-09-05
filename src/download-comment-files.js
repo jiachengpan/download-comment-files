@@ -65,7 +65,7 @@ async function run() {
 
       console.log('header', options);
       try {
-        const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
+        const saved = path.join(output_path, filename);
         console.log('downloading...', href, '->', saved);
         got(href, options).pipe(fs.createWriteStream(saved));
 
@@ -74,6 +74,9 @@ async function run() {
         if (!filetype || (!suffixRe.test(filetype.ext) && !suffixRe.test(filetype.mime))) {
           fs.unlinkSync(saved);
           continue;
+        } else {
+          const new_saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
+          fs.renameSync(saved, new_saved);
         }
 
         downloaded_files.push(saved);
