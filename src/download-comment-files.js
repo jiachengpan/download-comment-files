@@ -2,7 +2,9 @@ const core = require('@actions/core');
 const { GitHub, context } = require('@actions/github');
 const util = require('util');
 const path = require('path');
+const fs   = require('fs');
 const got  = require('got');
+
 const md   = require('markdown-it')({html: true, linkify: true});
 const fileType = require('file-type');
 const htmlParser = require('node-html-parser');

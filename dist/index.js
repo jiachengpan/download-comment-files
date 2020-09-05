@@ -44578,7 +44578,9 @@ const core = __webpack_require__(2186);
 const { GitHub, context } = __webpack_require__(5438);
 const util = __webpack_require__(1669);
 const path = __webpack_require__(5622);
+const fs   = __webpack_require__(5747);
 const got  = __webpack_require__(3061);
+
 const md   = __webpack_require__(8561)({html: true, linkify: true});
 const fileType = __webpack_require__(4930);
 const htmlParser = __webpack_require__(4363);
