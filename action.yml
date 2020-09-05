@@ -4,6 +4,9 @@ inputs:
   suffix:
     description: download files with specified suffix
     default: .pdf
+  output:
+    description: output path
+    default: downloaded
 outputs:
   files:
     description: downloaded file names

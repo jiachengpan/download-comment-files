@@ -29,6 +29,7 @@
     "got": "^11.6.0",
     "markdown-it": "^11.0.0",
     "node-html-parser": "^1.2.20",
+    "shelljs": "^0.8.4",
     "util": "^0.12.1"
   },
   "devDependencies": {

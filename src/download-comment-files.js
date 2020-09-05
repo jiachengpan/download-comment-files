@@ -4,6 +4,7 @@ const util = require('util');
 const path = require('path');
 const fs   = require('fs');
 const got  = require('got');
+const shell = require('shelljs');
 
 const md   = require('markdown-it')({html: true, linkify: true});
 const fileType = require('file-type');
@@ -19,15 +20,15 @@ async function run() {
 
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
     const suffix = core.getInput('suffix', { required: true });
+    const output = core.getInput('output', { required: true });
     const suffixRe = new RegExp(suffix, 'gi');
 
     const issue = context.payload.issue;
+    const repo  = context.payload.repository;
     const safe_title = issue.title.replace(/[\s<>|_]+/g, '_');
-    const output_path = safe_title + '_#' + path.basename(issue.url);
+    const output_path = path.join(output, repo.name, safe_title + '_#' + path.basename(issue.url));
 
-    if (!fs.existsSync(output_path)) {
-      fs.mkdirSync(output_path);
-    }
+    shell.mkdir('-p', output_path);
 
     const comment = context.payload.comment.body;
 
@@ -61,9 +62,6 @@ async function run() {
         downloaded_files.push(saved);
       }
     }
-
-    // Get owner and repo from context of payload that triggered the action
-    const { owner, repo } = context.repo;
 
     core.setOutput('files', downloaded_files);
   } catch (error) {
