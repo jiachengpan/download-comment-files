@@ -51791,15 +51791,20 @@ async function run() {
         options.headers.authorization = `Bearer ${github_token}`;
       }
 
-      const filetype = await fileType.fromStream(got(href, options));
-      console.log('filetype:', href, filetype);
-      if (!filetype) continue;
+      console.log('header', options);
+      try {
+        const filetype = await fileType.fromStream(got(href, options));
+        console.log('filetype:', href, filetype);
+        if (!filetype) continue;
 
-      if (suffixRe.test(filetype.ext)) {
-        const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
-        console.log('downloading...', href, '->', saved);
-        got(href, options).pipe(fs.createWriteStream(saved));
-        downloaded_files.push(saved);
+        if (suffixRe.test(filetype.ext)) {
+          const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
+          console.log('downloading...', href, '->', saved);
+          got(href, options).pipe(fs.createWriteStream(saved));
+          downloaded_files.push(saved);
+        }
+      } catch (error) {
+        console.log(util.inspect(error));
       }
     }
 
