@@ -51790,16 +51790,18 @@ async function run() {
 
       console.log('header', options);
       try {
-        const filetype = await fileType.fromStream(got(href, options));
-        console.log('filetype:', href, filetype);
-        if (!filetype) continue;
+        const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
+        console.log('downloading...', href, '->', saved);
+        got(href, options).pipe(fs.createWriteStream(saved));
 
-        if (suffixRe.test(filetype.ext)) {
-          const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
-          console.log('downloading...', href, '->', saved);
-          got(href, options).pipe(fs.createWriteStream(saved));
-          downloaded_files.push(saved);
+        const filetype = await fileType.fromFile(saved);
+        console.log('filetype:', saved, filetype);
+        if (!filetype || (!suffixRe.test(filetype.ext) && !suffixRe.test(filetype.mime))) {
+          fs.unlinkSync(saved);
+          continue;
         }
+
+        downloaded_files.push(saved);
       } catch (error) {
         console.log(util.inspect(error));
       }
