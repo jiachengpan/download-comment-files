@@ -44598,7 +44598,8 @@ async function run() {
     const suffixRe = new RegExp(suffix, 'gi');
 
     const issue = context.payload.issue;
-    const output_path = issue.title.replace(/[\W_]+/g, '_') + '_#' + path.basename(issue.url);
+    const safe_title = issue.title.replace(/[\s<>|_]+/g, '_');
+    const output_path = safe_title + '_#' + path.basename(issue.url);
 
     if (!fs.existsSync(output_path)) {
       fs.mkdirSync(output_path);
