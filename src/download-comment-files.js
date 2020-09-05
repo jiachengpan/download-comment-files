@@ -3,6 +3,7 @@ const { GitHub, context } = require('@actions/github');
 const util = require('util');
 const path = require('path');
 const fs   = require('fs');
+const url  = require('url');
 const got  = require('got');
 const shell = require('shelljs');
 
@@ -26,6 +27,7 @@ async function run() {
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
     const suffix = core.getInput('suffix', { required: true });
     const output = core.getInput('output', { required: true });
+    const github_token = core.getInput('repo-token');
     const suffixRe = new RegExp(suffix, 'gi');
 
     const issue = context.payload.issue;
@@ -46,24 +48,30 @@ async function run() {
     for (let i = 0; i < links.length; i++) {
       const link = links[i];
 
-      const url  = link.getAttribute('href');
+      const href = link.getAttribute('href');
       const text = link.rawText;
 
-      if (url in visited) continue;
-      visited[url] = true;
+      if (href in visited) continue;
+      visited[href] = true;
 
-      let filename = (text === url) ? path.basename(text) : text;
+      let filename = (text === href) ? path.basename(text) : text;
       filename = filename.replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/\s]+/g, '_').toLowerCase();
-      console.log('url:', filename, url);
+      console.log('href:', filename, href);
 
-      const filetype = await fileType.fromStream(got.stream(url));
-      console.log('filetype:', url, filetype);
+      let options = {};
+      const parsed_url = url.parse(href);
+      if (parsed_url && 'github' in parsed_url.hostname) {
+        options = { headers: `authorization: Bearer ${github_token}` };
+      }
+
+      const filetype = await fileType.fromStream(got.stream(href, options));
+      console.log('filetype:', href, filetype);
       if (!filetype) continue;
 
       if (suffixRe.test(filetype.ext)) {
         const saved = path.join(output_path, path.basename(filename, filetype.ext) + '.' + filetype.ext );
-        console.log('downloading...', url, '->', saved);
-        got.stream(url).pipe(fs.createWriteStream(saved));
+        console.log('downloading...', href, '->', saved);
+        got.stream(href, options).pipe(fs.createWriteStream(saved));
         downloaded_files.push(saved);
       }
     }
