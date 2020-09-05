@@ -37,12 +37,11 @@ async function run() {
       const filename = (text === url) ? path.basename(text) : text;
       console.log(filename, url);
 
-      const stream = got.stream(url);
-      const filetype = await fileType.fromStream(stream);
+      const filetype = await fileType.fromStream(got.stream(url));
       console.log(url, filetype);
 
       if (suffixRe.test(filetype.ext)) {
-        stream.pipe(fs.createWriteStream(filename));
+        got.stream(url).pipe(fs.createWriteStream(filename));
         downloaded_files.push(filename);
       }
     }
