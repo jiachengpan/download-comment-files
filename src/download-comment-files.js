@@ -14,8 +14,8 @@ async function run() {
   try {
     // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
     const github = new GitHub(process.env.GITHUB_TOKEN);
-    if (context.eventName != 'issue_comment') {
-      console.warn(`event name is not 'issue_comment': ${context.eventName}`)
+    if (context.eventName != 'issue_comment' && context.eventName != 'issues') {
+      console.warn(`event name is not issue-related: ${context.eventName}`)
     }
 
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
@@ -30,7 +30,7 @@ async function run() {
 
     shell.mkdir('-p', output_path);
 
-    const comment = context.payload.comment.body;
+    const comment = context.eventName == 'issue_comment' ? context.payload.comment.body : context.payload.issue.body;
 
     const html = md.render(comment);
     const root = htmlParser.parse(html);
