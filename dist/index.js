@@ -44614,9 +44614,12 @@ async function run() {
       console.log(filename, url);
 
       const filetype = await fileType.fromStream(got.stream(url));
+      if (!filetype) continue;
+
       console.log(url, filetype);
 
       if (suffixRe.test(filetype.ext)) {
+        console.log('downloading...', url);
         got.stream(url).pipe(fs.createWriteStream(filename));
         downloaded_files.push(filename);
       }
