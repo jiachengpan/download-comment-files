@@ -54252,6 +54252,7 @@ async function run() {
       const href = link.getAttribute('href');
       const text = link.rawText;
 
+      if (!href) continue;
       if (href in visited) continue;
       visited[href] = true;
 
@@ -54262,7 +54263,7 @@ async function run() {
       let options = { isStream: true, cookieJar: new CookieJar() };
       const parsed_url = url.parse(href);
       console.log('parsed url', parsed_url);
-      if (parsed_url && parsed_url.hostname.indexOf('github.com') >= 0) {
+      if (parsed_url && parsed_url.hostname && parsed_url.hostname.indexOf('github.com') >= 0) {
         options.headers = {'authorization': 'token ' + process.env.GITHUB_TOKEN};
       }
 
