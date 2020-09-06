@@ -54267,8 +54267,8 @@ async function run() {
       }
 
       console.log('header', options);
+      const saved = path.join(output_path, filename);
       try {
-        const saved = path.join(output_path, filename);
         console.log('downloading...', href, '->', saved);
 
         await pipeline(
@@ -54288,6 +54288,9 @@ async function run() {
         downloaded_files.push(saved);
       } catch (error) {
         console.log(util.inspect(error));
+        if (fs.existsSync(saved)) {
+          fs.unlinkSync(saved);
+        }
       }
     }
 
