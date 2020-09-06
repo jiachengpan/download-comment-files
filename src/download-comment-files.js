@@ -7,6 +7,7 @@ const url  = require('url');
 const got  = require('got');
 const shell = require('shelljs');
 const stream = require('stream');
+const {CookieJar} = require('tough-cookie');
 
 const md   = require('markdown-it')({html: true, linkify: true});
 const fileType = require('file-type');
@@ -60,7 +61,7 @@ async function run() {
       filename = filename.replace(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/\s]+/g, '_').toLowerCase();
       console.log('href:', filename, href);
 
-      let options = { isStream: true };
+      let options = { isStream: true, cookieJar: new CookieJar() };
       const parsed_url = url.parse(href);
       if (parsed_url && parsed_url.hostname.indexOf('github.com') >= 0) {
         options.headers = {};
