@@ -36,11 +36,13 @@ async function run() {
     const issue = context.payload.issue;
     const repo  = context.payload.repository;
     const safe_title = issue.title.replace(/[<>|_]+/g, '_');
-    const output_path = path.join(output, repo.name, safe_title + ' #' + path.basename(issue.url));
+    const comment = context.eventName == 'issue_comment' ? context.payload.comment.body : context.payload.issue.body;
+    const hashtags = comment.match(/(?<!#)#\S+/g).join('_');
+    
+    const output_path = path.join(output, repo.name, safe_title + ' #' + path.basename(issue.url), hashtags);
 
     shell.mkdir('-p', output_path);
 
-    const comment = context.eventName == 'issue_comment' ? context.payload.comment.body : context.payload.issue.body;
 
     const html = md.render(comment);
     const root = htmlParser.parse(html);
