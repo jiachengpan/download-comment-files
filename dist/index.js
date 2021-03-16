@@ -54235,7 +54235,8 @@ async function run() {
     const repo  = context.payload.repository;
     const safe_title = issue.title.replace(/[<>|_]+/g, '_');
     const comment = context.eventName == 'issue_comment' ? context.payload.comment.body : context.payload.issue.body;
-    const hashtags = comment.match(/(?<!#)#\S+/g).join('').replace(/[<>|_]+/g, '_');;
+    const hashtags_match = comment.match(/(?<!#)#\S+/g);
+    const hashtags = hashtags_match ? hashtags_match.join('').replace(/[<>|_]+/g, '_') : "";
     console.log('hashtags', hashtags);
     
     const output_path = path.join(output, repo.name, safe_title + ' #' + path.basename(issue.url), hashtags);
