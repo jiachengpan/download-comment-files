@@ -425,7 +425,7 @@ class GitHub extends rest_1.default {
     constructor(token, opts = {}) {
         super(Object.assign(Object.assign({}, opts), { auth: `token ${token}` }));
         this.graphql = graphql_1.defaults({
-            headers: { authorization: `token ${token}` }
+            headers: { Authorization: `token ${token}` }
         });
     }
 }
@@ -25920,7 +25920,7 @@ const understoodStatuses = new Set([
 const errorStatusCodes = new Set([
     500,
     502,
-    503, 
+    503,
     504,
 ]);
 
@@ -28599,7 +28599,7 @@ exports.parse = function (s) {
       if(/^:base64:/.test(value))
         return Buffer.from(value.substring(8), 'base64')
       else
-        return /^:/.test(value) ? value.substring(1) : value 
+        return /^:/.test(value) ? value.substring(1) : value
     }
     return value
   })
@@ -54238,7 +54238,7 @@ async function run() {
     const hashtags_match = comment.match(/(?<!#)#\S+/g);
     const hashtags = hashtags_match ? hashtags_match.join('').replace(/[<>|_]+/g, '_') : "";
     console.log('hashtags', hashtags);
-    
+
     const output_path = path.join(output, repo.name, safe_title + ' #' + path.basename(issue.url), hashtags);
 
     shell.mkdir('-p', output_path);
@@ -54248,7 +54248,7 @@ async function run() {
     const root = htmlParser.parse(html);
     const links = root.querySelectorAll('a');
 
-    let downloaded_files = []; 
+    let downloaded_files = [];
     let visited = {};
     for (let i = 0; i < links.length; i++) {
       const link = links[i];
@@ -54495,7 +54495,7 @@ module.exports = require("zlib");
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -54508,7 +54508,7 @@ module.exports = require("zlib");
 /******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -54517,14 +54517,14 @@ module.exports = require("zlib");
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
@@ -54534,9 +54534,9 @@ module.exports = require("zlib");
 /******/ 			return module;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup

@@ -40,7 +40,7 @@ async function run() {
     const hashtags_match = comment.match(/(?<!#)#\S+/g);
     const hashtags = hashtags_match ? hashtags_match.join('').replace(/[<>|_]+/g, '_') : "";
     console.log('hashtags', hashtags);
-    
+
     const output_path = path.join(output, repo.name, safe_title + ' #' + path.basename(issue.url), hashtags);
 
     shell.mkdir('-p', output_path);
@@ -50,7 +50,7 @@ async function run() {
     const root = htmlParser.parse(html);
     const links = root.querySelectorAll('a');
 
-    let downloaded_files = []; 
+    let downloaded_files = [];
     let visited = {};
     for (let i = 0; i < links.length; i++) {
       const link = links[i];
@@ -70,7 +70,7 @@ async function run() {
       const parsed_url = url.parse(href);
       console.log('parsed url', parsed_url);
       if (parsed_url && parsed_url.hostname && parsed_url.hostname.indexOf('github.com') >= 0) {
-        options.headers = {'authorization': 'token ' + process.env.GITHUB_TOKEN};
+        options.headers = {'Authorization': 'token ' + process.env.GITHUB_TOKEN};
       }
 
       console.log('header', options);
